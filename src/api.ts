@@ -1,175 +1,114 @@
-import { Category, Paginated, Question, CategoryPayload, QuestionPayload } from './types';
+import { Category, Paginated, Article, User, Comment, Tag, CommentPayload, ArticleTag, CategoryPayload, QuestionPayload } from './types';
+const BASE_URL = 'https://h1-1lck.onrender.com';
 
-const BASE_URL = 'https://vef2-2025-v3-hayb.onrender.com';
+// Define a type for the possible payloads
+type Payload = CategoryPayload | QuestionPayload | CommentPayload | { name: string } | { content: string };
 
 export class QuestionsApi {
-  async fetchFromApi<T>(url: string): Promise<T | null> {
+  async fetchFromApi<T>(url: string, method: string = 'GET', payload?: Payload): Promise<T | null> {
     let response: Response | undefined;
     try {
-      response = await fetch(url);
+      response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: payload ? JSON.stringify(payload) : undefined,
+      });
     } catch (e) {
-      console.error('error fetching from api', url, e);
+      console.error(`Error fetching from API (${method} ${url})`, e);
       return null;
     }
 
     if (!response.ok) {
-      console.error('non 2xx status from API', url);
+      console.error(`API responded with status ${response.status} for ${url}`);
       return null;
     }
 
-    if (response.status === 404) {
-      console.error('404 from API', url);
-      return null;
-    }
-
-    let json: unknown;
     try {
-      json = await response.json();
+      return await response.json();
     } catch (e) {
-      console.error('error parsing json', url, e);
-      return null;
-    }
-
-    return json as T;
-  }
-
-  
-  async getCategory(slug: string): Promise<Category | null> {
-    const url = `${BASE_URL}/categories/${slug}`;
-    return await this.fetchFromApi<Category>(url);
-  }
-
-
-  async getCategories(): Promise<Paginated<Category> | null> {
-    const url = `${BASE_URL}/categories`;
-    return await this.fetchFromApi<Paginated<Category>>(url);
-  }
-
-
-  async getQuestions(categorySlug: string): Promise<Paginated<Question> | null> {
-    const url = `${BASE_URL}/questions?category=${categorySlug}`;
-    return await this.fetchFromApi<Paginated<Question>>(url);
-  }
-
-  async getAllQuestions(): Promise<Question[] | null> {
-    try {
-      const response = await fetch(`${BASE_URL}/questions`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch all questions: ${response.statusText}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching all questions:', error);
+      console.error('Error parsing JSON response:', e);
       return null;
     }
   }
 
-
-  async addQuestion(payload: QuestionPayload): Promise<Question | null> {
-    try {
-      const response = await fetch(`${BASE_URL}/questions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add question');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error adding question:', error);
-      return null;
-    }
+  async getCategories(): Promise<Category[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/categories`);
   }
-
 
   async addCategory(payload: CategoryPayload): Promise<Category | null> {
-    try {
-      const response = await fetch(`${BASE_URL}/categories`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add Category');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error adding Category:', error);
-      return null;
-    }
+    return await this.fetchFromApi(`${BASE_URL}/categories`, 'POST', payload);
   }
 
-
-  async deleteCategory(slug: string): Promise<boolean> {
-    try {
-      const response = await fetch(`${BASE_URL}/categories/${slug}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log("Delete Category Response Status:", response.status);
-      console.log("Delete Category Response Status Text:", response.statusText);
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error("Delete Category Error Data:", errorData);
-        throw new Error(`Failed to delete category: ${errorData || response.statusText}`);
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Error deleting category:', error);
-      return false;
-    }
+  async updateCategory(id: number, payload: CategoryPayload): Promise<Category | null> {
+    return await this.fetchFromApi(`${BASE_URL}/categories/${id}`, 'PATCH', payload);
   }
 
-
-  async updateCategory(slug: string, payload: CategoryPayload): Promise<Category | null> {
-    try {
-      const response = await fetch(`${BASE_URL}/categories/${slug}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update category');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error updating category:', error);
-      return null;
-    }
+  async deleteCategory(id: number): Promise<boolean> {
+    return await this.fetchFromApi(`${BASE_URL}/categories/${id}`, 'DELETE') !== null;
   }
 
+  async getTags(): Promise<Tag[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/tags`);
+  }
 
-  async updateQuestion(id: number, payload: QuestionPayload): Promise<Question | null> {
-    try {
-      const response = await fetch(`${BASE_URL}/questions/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+  async getArticlesByTag(tagName: string): Promise<Article[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/tags/${tagName}/articles`);
+  }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to update question: ${errorData.message || response.statusText}`);
-      }
+  async addTag(name: string): Promise<Tag | null> {
+    return await this.fetchFromApi(`${BASE_URL}/tags`, 'POST', { name });
+  }
 
-      return await response.json();
-    } catch (error) {
-      console.error('Error updating question:', error);
-      return null;
-    }
+  async getArticles(): Promise<Article[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/articles`);
+  }
+
+  async getArticleById(articleId: number): Promise<Article | null> {
+    return await this.fetchFromApi(`${BASE_URL}/articles/${articleId}`);
+  }
+  async getArticleByCategory(categoryId: number): Promise<Article[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/categories/${categoryId}/articles`);
+  }
+
+  async addArticle(payload: QuestionPayload): Promise<Article | null> {
+    return await this.fetchFromApi(`${BASE_URL}/articles`, 'POST', payload);
+  }
+
+  async updateArticle(articleId: number, payload: QuestionPayload): Promise<Article | null> {
+    return await this.fetchFromApi(`${BASE_URL}/articles/${articleId}`, 'PATCH', payload);
+  }
+
+  async deleteArticle(articleId: number): Promise<boolean> {
+    return await this.fetchFromApi(`${BASE_URL}/articles/${articleId}`, 'DELETE') !== null;
+  }
+
+  async getComments(articleId: number): Promise<Comment[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/comments/${articleId}`);
+  }
+
+  async addComment(payload: CommentPayload): Promise<Comment | null> {
+    return await this.fetchFromApi(`${BASE_URL}/comments`, 'POST', payload);
+  }
+
+  async deleteComment(commentId: number): Promise<boolean> {
+    return await this.fetchFromApi(`${BASE_URL}/comments/${commentId}`, 'DELETE') !== null;
+  }
+
+  async getUserById(userId: number): Promise<User | null> {
+    return await this.fetchFromApi(`${BASE_URL}/users/${userId}`);
+  }
+
+  async getAllUsers(): Promise<User[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/users`);
+  }
+
+  async updateUser(userId: number, payload: QuestionPayload): Promise<User | null> {
+    return await this.fetchFromApi(`${BASE_URL}/users/${userId}`, 'PATCH', payload);
+  }
+
+  async deleteUser(userId: number): Promise<boolean> {
+    return await this.fetchFromApi(`${BASE_URL}/users/${userId}`, 'DELETE') !== null;
   }
 }

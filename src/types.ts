@@ -1,38 +1,68 @@
 export type UiState = 'initial' | 'loading' | 'error' | 'data' | 'empty';
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+  admin: boolean;
+  created: string;
+  updated: string;
+};
+
+export type Article = {
+  id: number;
+  articlename: string;
+  content: string;
+  img?: string;
+  date: string;
+  userId: number;
+  categoryId?: number;
+  comments: Comment[];
+  tags: Tag[];
+};
+
+export type Comment = {
+  id: number;
+  articleId: number;
+  userId?: number;
+  content: string;
+  date: string;
+};
 
 export type Category = {
-  id: string;
-  slug: string;
-  title: string;
-};
-
-export type Answer = {
-  answer: string;
   id: number;
-  text: string;
-  correct: boolean;
+  name: string;
+  description?: string;
 };
 
-export type Question = {
-  question: string;
+export type Tag = {
   id: number;
-  text: string;
-  answers: Answer[];
-  category: Category;
+  name: string;
 };
 
-export type CategoryPayload = {
-  title: string;
-};
-
-export type QuestionPayload = {
-  question: string;
-  answers: { answer: string; correct: boolean }[];
+export type ArticleTag = {
+  articleId: number;
+  tagId: number;
 };
 
 export type Paginated<T> = {
-  data: T[];
+  items: T[];
   total: number;
-  limit: number;
-  offset: number;
 };
+
+export type CategoryPayload = {
+  name: string;
+  description?: string;
+}; 
+
+export type QuestionPayload = {
+  articlename: string;
+  content: string;
+  img?: string;
+  categoryId?: number;
+};
+
+export type CommentPayload = {
+  articleId: number;
+  content: string;
+}

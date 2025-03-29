@@ -1,65 +1,50 @@
 'use client';
 
-import { QuestionsApi } from '@/api';
-import { Category, Paginated, UiState } from '@/types';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import styles from './Categories.module.css';
+import { QuestionsApi } from '@/api';
+import { Category, UiState } from '@/types';
+import Link from 'next/link';
 
-type Props = {
-  title: string;
-  tag?: string;
-  popular?: boolean;
-};
-
-export default function Categories({ title }: Props) {
+export default function CategoryList() {
+  const [categories, setCategories] = useState<Category[]>([]);
   const [uiState, setUiState] = useState<UiState>('initial');
-  const [categories, setCategories] = useState<Paginated<Category> | null>(
-    null,
-  );
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchCategories() {
       setUiState('loading');
-
       const api = new QuestionsApi();
-      const categoriesResponse = await api.getCategories();
+      const response = await api.getCategories();
 
-      if (!categoriesResponse) {
+      if (!response) {
         setUiState('error');
-      } else {
-        setUiState('data');
-        setCategories(categoriesResponse);
+        return;
       }
+
+      setCategories(response);
+      setUiState('data');
     }
-    fetchData();
+
+    fetchCategories();
   }, []);
 
-  console.log(categories);
+  if (uiState === 'loading') {
+    return <p>Loading categories...</p>;
+  }
+
+  if (uiState === 'error') {
+    return <p>Error loading categories. Please try again later.</p>;
+  }
 
   return (
-    <div className={styles.cats}>
-      <h2>{title}</h2>
-
-      {uiState === 'loading' && <p>Sæki flokka</p>}
-      {uiState === 'error' && <p>Villa við að sækja flokka</p>}
-      {uiState === 'data' && (
-        <ul>
-          {Array.isArray(categories) ? (
-            categories.map((category, index) => (
-              <li key={index}>
-                <Link href={`/flokkar/${category.slug}`}>{category.title}</Link>
-              </li>
-            ))
-          ) : (
-            categories?.data.map((category, index) => (
-              <li key={index}>
-                <Link href={`/flokkar/${category.slug}`}>{category.title}</Link>
-              </li>
-            ))
-          )}
-        </ul>
-      )}
+    <div>
+      <h2>All Categories</h2>
+      <ul>
+      {categories.map((category) => (
+        <li key={category.id}>
+            <Link href={`/browse/category/${category.id}`}>{category.name}</Link>
+        </li>
+        ))}
+      </ul>
     </div>
   );
 }
