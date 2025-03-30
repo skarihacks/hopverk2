@@ -1,0 +1,112 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
+
+public class FlightControllerTest {
+
+    private FlightController flightController;
+    private MockFlightDB mockFlightDB;
+
+    @BeforeEach
+    public void setUp() {
+        mockFlightDB = new MockFlightDB();
+        flightController = new FlightController(mockFlightDB);
+    }
+
+    @Test
+    public void testSearchFlightsReturnsCorrectResults() {
+        List<Flight> results = flightController.searchFlights("Reykjavik", "Berlin");
+
+        assertNotNull(results);
+        assertEquals(2, results.size());
+
+        assertEquals("Reykjavik", results.get(0).getOrigin());
+        assertEquals("Berlin", results.get(0).getDestination());
+    }
+
+    @Test
+    public void testSearchFlightsReturnsEmptyListWhenNoMatches() {
+        List<Flight> results = flightController.searchFlights("Nowhere", "ImaginaryCity");
+
+        assertNotNull(results);
+        assertTrue(results.isEmpty());
+    }
+}
+
+import java.util.*;
+
+public class MockFlightDB implements FlightDB {
+
+    @Override
+    public List<Flight> getFlights(String origin, String destination) {
+        // Simulated flight records
+        List<Flight> mockFlights = new ArrayList<>();
+
+        if (origin.equals("Reykjavik") && destination.equals("Berlin")) {
+            mockFlights.add(new Flight("FI101", "Reykjavik", "Berlin", "2025-05-01T09:00"));
+            mockFlights.add(new Flight("FI202", "Reykjavik", "Berlin", "2025-05-02T14:00"));
+        }
+
+        return mockFlights;
+    }
+}
+
+
+import java.util.List;
+
+public class FlightController {
+
+    private final FlightDB flightDB;
+
+    public FlightController(FlightDB flightDB) {
+        this.flightDB = flightDB;
+    }
+
+    /**
+     * Searches for flights matching the given origin and destination.
+     * @param origin      The departure city.
+     * @param destination The arrival city.
+     * @return List of flights matching the search criteria.
+     */
+    public List<Flight> searchFlights(String origin, String destination) {
+        return flightDB.getFlights(origin, destination);
+    }
+}
+
+public class Flight {
+
+    private String flightNumber;
+    private String origin;
+    private String destination;
+    private String departureTime; // ISO 8601 format: e.g., "2025-05-01T09:00"
+
+    public Flight(String flightNumber, String origin, String destination, String departureTime) {
+        this.flightNumber = flightNumber;
+        this.origin = origin;
+        this.destination = destination;
+        this.departureTime = departureTime;
+    }
+
+    // Getters
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    @Override
+    public String toString() {
+        return flightNumber + " from " + origin + " to " + destination + " at " + departureTime;
+    }
+}

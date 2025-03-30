@@ -2,6 +2,7 @@
 import Footer from '@/components/Footer/footer';
 import Navigation from '@/components/Navigation/Navigation';
 import { ArticleView } from '@/components/Article/Article';
+import MakeComment from '@/components/MakeComment/MakeComment';
 
 export default async function ArticlePage({
   params,

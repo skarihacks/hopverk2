@@ -100,6 +100,14 @@ export class QuestionsApi {
     return await this.fetchFromApi(`${BASE_URL}/users/${userId}`);
   }
 
+  async getUserArticles(userId: number): Promise<Article[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/users/${userId}/articles`);
+  }
+  
+  async getUserComments(userId: number): Promise<Comment[] | null> {
+    return await this.fetchFromApi(`${BASE_URL}/comments/users/${userId}/comments`);
+  }
+
   async getAllUsers(): Promise<User[] | null> {
     return await this.fetchFromApi(`${BASE_URL}/users`);
   }

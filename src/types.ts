@@ -19,15 +19,28 @@ export type Article = {
   categoryId?: number;
   comments: Comment[];
   tags: Tag[];
+  user?: {
+    id: number;
+    username: string;
+  }
 };
 
-export type Comment = {
+export interface Comment {
   id: number;
-  articleId: number;
-  userId?: number;
   content: string;
   date: string;
-};
+  articleId: number;
+  userId?: number;
+  article?: {
+    id: number;
+    articlename: string;
+  };
+  user?: {
+    id: number;
+    username: string;
+  };
+}
+
 
 export type Category = {
   id: number;
@@ -65,4 +78,10 @@ export type QuestionPayload = {
 export type CommentPayload = {
   articleId: number;
   content: string;
+}
+
+export type Registerpayload = {
+  username: string;
+  email: string;
+  password: string;
 }
