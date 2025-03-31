@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Article, Comment, UiState, User } from '@/types';
 import { JSX, useEffect, useState } from 'react';
 import MakeComment from '@/components/MakeComment/MakeComment';
+import AddTagToArticle from '../AddTag/AddTagToArticle';
+import ArticleTags from '../AddTag/ArticleTags';
 
 export function ArticleView({ id }: { id: number }): JSX.Element {
   const [uiState, setUiState] = useState<UiState>('initial');
@@ -91,8 +93,13 @@ export function ArticleView({ id }: { id: number }): JSX.Element {
           {article.user?.username}
         </Link>
       </h2>
+      <ArticleTags tags={article.tags.map((t) => t.tag)} />
       {article.img && <img src={article.img} alt={article.articlename} />}
       <p>{article.content}</p>
+      {(user?.id === article.userId || user?.admin) && (
+        <AddTagToArticle articleId={article.id} />
+      )}
+
       {(user?.id === article.userId || user?.admin) && (
       <Link href={`/articles/${article.id}/edit`}><button>Edit post</button></Link>
       )}
