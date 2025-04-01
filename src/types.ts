@@ -49,6 +49,7 @@ export type Category = {
 };
 
 export type Tag = {
+  tag: any;
   id: number;
   name: string;
 };
