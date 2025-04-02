@@ -1,27 +1,28 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
+import styles from "./AddCategory.module.css";
 
 export default function AddCategory() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [message, setMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      setMessage('You must be logged in as admin to create a category.');
+      setMessage("You must be logged in as admin to create a category.");
       return;
     }
 
     try {
-      const res = await fetch('https://h1-1lck.onrender.com/categories', {
-        method: 'POST',
+      const res = await fetch("https://h1-1lck.onrender.com/categories", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name, description }),
@@ -30,31 +31,38 @@ export default function AddCategory() {
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.error || 'Something went wrong');
+        setMessage(data.error || "Something went wrong");
       } else {
-        setMessage('Category created!');
-        setName('');
-        setDescription('');
+        setMessage("Category created!");
+        setName("");
+        setDescription("");
         window.location.reload();
       }
     } catch (err) {
-      setMessage('Failed to create category.');
+      setMessage("Failed to create category.");
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <h3>Add New Category</h3>
       {message && <p>{message}</p>}
 
       <label>
         Name:
-        <input value={name} onChange={(e) => setName(e.target.value)} required />
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
       </label>
 
       <label>
         Description:
-        <input value={description} onChange={(e) => setDescription(e.target.value)} />
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
       </label>
 
       <button type="submit">Create Category</button>

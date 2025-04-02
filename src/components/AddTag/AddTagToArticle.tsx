@@ -48,7 +48,7 @@ export default function AddTagToArticle({ articleId }: { articleId: number }) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Add Tag:
+        <h3>Add Tag</h3>
         <select value={selectedTagName} onChange={(e) => setSelectedTagName(e.target.value)}>
           <option value="">Select tag</option>
           {tags.map((tag) => (

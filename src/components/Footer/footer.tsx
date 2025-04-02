@@ -7,8 +7,9 @@ export default function Footer() {
     return (
       <nav className={styles.footer}>
         <ul>
-          <li><Link href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Check out my other work!</Link></li>
-          
+          <li>Sævar Breki Snorrason</li>
+          <li>Hópverkefni 2</li>
+          <li>Óskar Víkingur Davíðsson</li>
         </ul>
       </nav>
     );

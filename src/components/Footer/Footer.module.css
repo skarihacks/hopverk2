@@ -1,7 +1,8 @@
 
 .footer {
-    background-color: black;
-    color: aqua;
+    background-color: #0070f3;
+    color: black;
+    font-weight: bold;
     margin: 0;
     width: 100vw;       
     position: fixed;   
@@ -9,6 +10,11 @@
     left: 0;          
     text-align: center; 
     padding: 1rem;  
-    z-index: 1000;     
-  }
+    z-index: 1000;
+}
+
+.footer ul {
+  display: flex;
+  justify-content: space-evenly;
+}
   

@@ -89,10 +89,10 @@ export default function UserProfilePage() {
     <div>
       <h1>{user.username}</h1>
       <p>Email: {user.email}</p>
-      <p>Admin: {user.admin ? 'Yes' : 'No'}</p>
+      <p style={{marginBottom: '1rem'}}>Admin: {user.admin ? 'Yes' : 'No'}</p>
 
       {isAdmin && (
-        <button onClick={handleDelete} style={{ backgroundColor: 'red', color: 'white' }}>
+        <button onClick={handleDelete} style={{ marginTop: '1rem', marginBottom: '1rem' }}>
           Delete User Account
         </button>
       )}
@@ -104,14 +104,15 @@ export default function UserProfilePage() {
             <Link href={`/articles/${a.id}`}>{a.articlename}</Link>
           </li>
         ))}
+        {articles.length === 0 && <li>No articles found.</li>}
       </ul>
 
       <h2>Comments</h2>
       <ul>
         {comments.map((c) => (
           <li key={c.id}>
-            {c.content} on{' '}
-            <Link href={`/articles/${c.articleId}`}>
+            "{c.content}"" on{' '}
+            <Link href={`/articles/${c.articleId}` } style={{fontWeight: 'bold'}}>
               {c.article?.articlename || `Article #${c.articleId}`}
             </Link>
           </li>

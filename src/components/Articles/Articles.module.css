@@ -1,3 +1,40 @@
 .cats {
   background-color: beige;
 }
+
+.h2 {
+  margin-bottom: 1rem;
+  justify-self: center;
+}
+
+.ul {
+  list-style: none;
+}
+
+.ul:last-child {
+  margin-bottom: 0;
+}
+
+.li:hover {
+  color: grey;
+}
+
+.li {
+  margin-bottom: 0.5rem;
+}
+
+.pagination button {
+  flex-grow: 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.button:hover {
+  background-color: #0059c1;
+}

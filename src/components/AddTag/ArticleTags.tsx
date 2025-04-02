@@ -11,7 +11,7 @@ export default function ArticleTags({ tags }: Props) {
   if (!tags || tags.length === 0) return <p>No tags</p>;
 
   return (
-    <div>
+    <div className='row'>
       <h4>Tags:</h4>
       <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', padding: 0 }}>
         {tags.map((tag) => (
