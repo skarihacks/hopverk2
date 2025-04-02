@@ -88,8 +88,11 @@ export default function Dashboard() {
       <ul>
         {comments.map((comment) => (
           <li key={comment.id}>
-            <Link href={`/articles/${comment.articleId}`}>{comment.content}</Link>
-          </li>
+          "{comment.content}"" on{' '}
+          <Link href={`/articles/${comment.articleId}` } style={{fontWeight: 'bold'}}>
+            {comment.article?.articlename || `Article #${comment.articleId}`}
+          </Link>
+        </li>
         ))}
         {comments.length === 0 && <li>No comments found.</li>}
       </ul>

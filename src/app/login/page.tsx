@@ -9,9 +9,6 @@ export default function LoginPage() {
     <div className="page">
         <Navigation/>
         <LoginForm />
-        <p>
-        Don't have an account? <Link href="/register">Register here</Link>
-      </p>
         <Footer/>
     </div>
   );

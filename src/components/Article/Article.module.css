@@ -1,0 +1,26 @@
+.p {
+    margin-bottom: 5rem;
+}
+
+.labelRow {
+    margin-top: 1rem;
+    justify-content: center;
+    gap: 1rem;
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.insideComment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.li {
+    background-color: beige;
+    padding: 1rem;
+}
+
+.small  {
+    font-weight: bold;
+}

@@ -59,9 +59,9 @@ export default function MakeComment({ articleId, onCommentPosted }: Props) {
 
   return (
     <div>
-      <h3>Write a Comment</h3>
       {message && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
+        <h3>Write a Comment</h3>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}

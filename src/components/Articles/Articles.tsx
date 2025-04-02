@@ -46,26 +46,26 @@ export default function Articles({ title }: Props) {
 
   return (
     <div className={styles.articles}>
-      <h2>{title}</h2>
+      <h2 className={styles.h2}>{title}</h2>
 
       {uiState === 'loading' && <p>Loading articles...</p>}
       {uiState === 'error' && <p>Error loading articles</p>}
       {uiState === 'data' && (
         <>
-          <ul>
+          <ul className={styles.ul}>
             {articles?.map((article, index) => (
-              <li key={index}>
+              <li className={styles.li} key={index}>
                 <Link href={`/articles/${article.id}`}>{article.articlename}</Link>
               </li>
             ))}
           </ul>
 
           <div className={styles.pagination}>
-            <button onClick={handlePrevious} disabled={page === 1}>
+            <button className={styles.button} onClick={handlePrevious} disabled={page === 1}>
               Previous
             </button>
             <span>Page {page}</span>
-            <button onClick={handleNext}>Next</button>
+            <button className={styles.button} onClick={handleNext}>Next</button>
           </div>
         </>
       )}

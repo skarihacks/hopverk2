@@ -1,5 +1,5 @@
 .nav {
-  background-color: pink; 
+  background-color: #0070f3; 
   color: black;         
   margin: 0;
   width: 100vw;           
@@ -21,7 +21,9 @@
 }
 
 .nav li {
-  display: inline;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav a {
@@ -31,7 +33,6 @@
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
 }
-
 
 .nav a:hover {
   background-color: black;
@@ -54,6 +55,8 @@
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s ease;
+  margin-bottom: 0;
+  font-size: 16px;
 }
 
 .logoutbutton button:hover {
