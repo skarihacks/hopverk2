@@ -1,5 +1,11 @@
 # 📰 Fullstack Article Hub
 
+
+## Admin Login
+username: olafur
+password: osk
+
+
 A fully functional fullstack article publishing platform built with **Next.js**, **Hono**, **Prisma**, and **PostgreSQL**. Users can register, login, write articles, comment, and browse content by categories and tags. Admins get special access to manage users, articles, categories, and tags.
 
 ## ✨ Features
@@ -40,7 +46,7 @@ A fully functional fullstack article publishing platform built with **Next.js**,
 - Styled with plain CSS Modules
 
 ### ☁️ Deployment & Stack
-- Hosted on **Render**
+- Hosted on Vercel
 - Backend: Hono (Express-style web framework for modern edge/serverless environments)
 - Database: PostgreSQL via Prisma ORM
 - Cloudinary for image uploads
