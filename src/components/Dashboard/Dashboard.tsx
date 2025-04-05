@@ -88,7 +88,7 @@ export default function Dashboard() {
       <ul>
         {comments.map((comment) => (
           <li key={comment.id}>
-          "{comment.content}"" on{' '}
+          &quot;{comment.content}&quot;&quot; on{' '}
           <Link href={`/articles/${comment.articleId}` } style={{fontWeight: 'bold'}}>
             {comment.article?.articlename || `Article #${comment.articleId}`}
           </Link>

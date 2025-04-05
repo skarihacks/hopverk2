@@ -51,7 +51,7 @@ export default function MakeComment({ articleId, onCommentPosted }: Props) {
       setContent('');
       onCommentPosted(); // Notify parent to refresh comments
     } catch (err) {
-      setMessage('Something went wrong.');
+      console.error('Something went wrong.', err);
     }
   };
 

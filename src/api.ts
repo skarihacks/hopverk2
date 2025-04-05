@@ -1,4 +1,4 @@
-import { Category, Paginated, Article, User, Comment, Tag, CommentPayload, ArticleTag, CategoryPayload, QuestionPayload } from './types';
+import { Category, Article, User, Comment, Tag, CommentPayload, CategoryPayload, QuestionPayload } from './types';
 const BASE_URL = 'https://h1-1lck.onrender.com';
 
 // Define a type for the possible payloads

@@ -39,7 +39,7 @@ export default function AddCategory() {
         window.location.reload();
       }
     } catch (err) {
-      setMessage("Failed to create category.");
+      console.error('Failed to create category.', err);
     }
   }
 

@@ -24,7 +24,7 @@ export default function NewArticleForm() {
     }
 
     fetchCategories();
-  }, []);
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +63,7 @@ export default function NewArticleForm() {
         setImage(null);
       }
     } catch (error) {
-      setMessage("Failed to submit article");
+      console.error("Failed to submit article", error);
     }
   };
 
@@ -116,7 +116,7 @@ export default function NewArticleForm() {
           onChange={(e) => setImage(e.target.files?.[0] || null)}
         />
       </label>
-      <script>console.log('Selected category:', category)</script>
+      <script>console.log(&apos;Selected category:&apos;, category)</script>
 
       <button type="submit">Post Article</button>
     </form>

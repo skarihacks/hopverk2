@@ -18,7 +18,7 @@ export type Article = {
   userId: number;
   categoryId?: number;
   comments: Comment[];
-  tags: Tag[];
+  tags: ArticleTag[];
   user?: {
     id: number;
     username: string;
@@ -48,15 +48,13 @@ export type Category = {
   description?: string;
 };
 
-export type Tag = {
-  tag: any;
-  id: number;
-  name: string;
-};
+  export type Tag = {
+    id: number;
+    name: string;
+  };
 
 export type ArticleTag = {
-  articleId: number;
-  tagId: number;
+  tag: Tag;
 };
 
 export type Paginated<T> = {

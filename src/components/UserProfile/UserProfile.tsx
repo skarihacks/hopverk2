@@ -111,7 +111,7 @@ export default function UserProfilePage() {
       <ul>
         {comments.map((c) => (
           <li key={c.id}>
-            "{c.content}"" on{' '}
+            &quot;{c.content}&quot;&quot; on{' '}
             <Link href={`/articles/${c.articleId}` } style={{fontWeight: 'bold'}}>
               {c.article?.articlename || `Article #${c.articleId}`}
             </Link>

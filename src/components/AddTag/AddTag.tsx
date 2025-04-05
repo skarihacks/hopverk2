@@ -36,7 +36,7 @@ export default function AddTag() {
         window.location.reload();
       }
     } catch (err) {
-      setMessage('Failed to create tag.');
+      console.error('Failed to create category.', err);
     }
   }
 

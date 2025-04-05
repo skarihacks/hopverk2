@@ -1,7 +1,7 @@
 'use client';
 
 import { QuestionsApi } from '@/api';
-import { Article, Paginated, UiState } from '@/types';
+import { Article, UiState } from '@/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import styles from './Articles.module.css';
