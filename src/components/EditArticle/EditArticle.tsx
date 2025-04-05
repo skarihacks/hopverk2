@@ -1,39 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Article } from '@/types';
-import { QuestionsApi } from '@/api';
 
 type Props = {
-  articleId: number;
+  article: Article;
 };
 
-export default function EditArticleForm({ articleId }: Props) {
+export default function EditArticleForm({ article }: Props) {
   const router = useRouter();
-  const [article, setArticle] = useState<Article | null>(null);
-  const [articlename, setArticlename] = useState('');
-  const [content, setContent] = useState('');
+  const [articlename, setArticlename] = useState(article.articlename);
+  const [content, setContent] = useState(article.content);
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchArticle() {
-      const api = new QuestionsApi();
-      const data = await api.getArticleById(articleId);
-      if (data) {
-        setArticle(data);
-        setArticlename(data.articlename);
-        setContent(data.content);
-      }
-      setLoading(false);
-    }
-
-    fetchArticle();
-  }, [articleId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const token = localStorage.getItem('token');
     if (!token) {
       setMessage('Unauthorized');
@@ -45,7 +28,7 @@ export default function EditArticleForm({ articleId }: Props) {
     formData.append('content', content);
 
     try {
-      const res = await fetch(`https://h1-1lck.onrender.com/articles/${articleId}`, {
+      const res = await fetch(`https://h1-1lck.onrender.com/articles/${article.id}`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -59,7 +42,7 @@ export default function EditArticleForm({ articleId }: Props) {
         setMessage(data.error || 'Update failed');
       } else {
         setMessage('Article updated!');
-        router.push(`/articles/${articleId}`);
+        router.push(`/articles/${article.id}`);
       }
     } catch (err) {
       console.error(err);
@@ -67,14 +50,10 @@ export default function EditArticleForm({ articleId }: Props) {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (!article) return <p>Article not found.</p>;
-
   return (
     <form onSubmit={handleSubmit}>
       <h2>Edit Article</h2>
       {message && <p>{message}</p>}
-
       <label>
         Title:
         <input
@@ -84,7 +63,6 @@ export default function EditArticleForm({ articleId }: Props) {
           required
         />
       </label>
-
       <label>
         Content:
         <textarea
@@ -93,7 +71,6 @@ export default function EditArticleForm({ articleId }: Props) {
           required
         />
       </label>
-
       <button type="submit">Update</button>
     </form>
   );
