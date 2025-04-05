@@ -1,18 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Article } from '@/types';
+import { QuestionsApi } from '@/api';
 
 type Props = {
-  article: Article;
+  articleId: number;
 };
 
-export default function EditArticleForm({ article }: Props) {
+export default function EditArticleForm({ articleId }: Props) {
   const router = useRouter();
-  const [articlename, setArticlename] = useState(article.articlename);
-  const [content, setContent] = useState(article.content);
+  const [article, setArticle] = useState<Article | null>(null);
+  const [articlename, setArticlename] = useState('');
+  const [content, setContent] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchArticle() {
+      const api = new QuestionsApi();
+      const data = await api.getArticleById(articleId);
+      if (data) {
+        setArticle(data);
+        setArticlename(data.articlename);
+        setContent(data.content);
+      }
+      setLoading(false);
+    }
+
+    fetchArticle();
+  }, [articleId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +45,7 @@ export default function EditArticleForm({ article }: Props) {
     formData.append('content', content);
 
     try {
-      const res = await fetch(`https://h1-1lck.onrender.com/articles/${article.id}`, {
+      const res = await fetch(`https://h1-1lck.onrender.com/articles/${articleId}`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -41,13 +59,16 @@ export default function EditArticleForm({ article }: Props) {
         setMessage(data.error || 'Update failed');
       } else {
         setMessage('Article updated!');
-        router.push(`/articles/${article.id}`);
+        router.push(`/articles/${articleId}`);
       }
     } catch (err) {
       console.error(err);
       setMessage('Something went wrong');
     }
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (!article) return <p>Article not found.</p>;
 
   return (
     <form onSubmit={handleSubmit}>
